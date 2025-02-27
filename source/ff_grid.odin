@@ -1,7 +1,7 @@
 package game
 
-GRID_WIDTH : int : 100
-GRID_HEIGHT : int : 10
+GRID_WIDTH : int : 40 // size based on window
+GRID_HEIGHT : int : 22 // size based on window
 TILE_SIZE : int : 32
 
 FFGrid :: struct {

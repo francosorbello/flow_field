@@ -7,17 +7,24 @@ import "core:c"
 
 run: bool
 grid : ^FFGrid
-
+player : ^DummyPlayer
 init :: proc() {
 	run = true
 	rl.SetConfigFlags({.WINDOW_RESIZABLE, .VSYNC_HINT})
 	rl.InitWindow(1280, 720, "Odin + Raylib on the web")
 	grid = ff_grid_make()
+	player = dummy_player_make()
 }
 
 update :: proc() {
+
+	// Update player
+	dt := rl.GetFrameTime()
+	dummy_player_update(player, dt)
+
 	rl.BeginDrawing()
 	rl.ClearBackground({0, 120, 153, 255})
+	
 	tiles := grid.tiles
 	for tile in tiles {
 		pos_x := i32(tile.x * grid.tile_size)
@@ -30,6 +37,7 @@ update :: proc() {
 		rl.DrawRectangle(pos_x, pos_y, tile_size, tile_size, tile_color)
 		rl.DrawRectangleLines(pos_x, pos_y, tile_size, tile_size, rl.Color{0, 0, 0, 255})
 	}
+	dummy_player_draw(player)
 	rl.EndDrawing()
 
 	// Anything allocated using temp allocator is invalid after this.
@@ -45,6 +53,7 @@ parent_window_size_changed :: proc(w, h: int) {
 shutdown :: proc() {
 	rl.CloseWindow()
 	ff_grid_free(grid)
+	dummy_player_free(player)
 }
 
 should_run :: proc() -> bool {
