@@ -1,0 +1,1 @@
+.\build_desktop.bat &&  .\build\desktop\game_desktop.exe
