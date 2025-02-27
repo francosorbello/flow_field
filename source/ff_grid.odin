@@ -36,3 +36,18 @@ ff_grid_make :: proc () -> ^FFGrid {
 ff_grid_free :: proc (grid : ^FFGrid) {
     free(grid)
 }
+
+ff_grid_pos_to_tile :: proc(grid : ^FFGrid, x, y : int) -> ^FFTile {
+    if x < 0 || x >= grid.width || y < 0 || y >= grid.height {
+        return nil
+    }
+    return &grid.tiles[y * grid.width + x]
+}
+
+ff_grid_pos_to_index :: proc(grid : ^FFGrid, x, y : int) -> int {
+    return y * grid.width + x
+}
+
+ff_grid_world_pos_to_index :: proc(grid : ^FFGrid, x, y : int) -> int {
+    return int(y / grid.tile_size) * grid.width + int(x / grid.tile_size)
+}

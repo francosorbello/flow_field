@@ -26,6 +26,8 @@ update :: proc() {
 	rl.ClearBackground({0, 120, 153, 255})
 	
 	tiles := grid.tiles
+	target_tile := ff_grid_world_pos_to_index(grid, int(player.position.x), int(player.position.y))
+	i := 0
 	for tile in tiles {
 		pos_x := i32(tile.x * grid.tile_size)
 		pos_y := i32(tile.y * grid.tile_size)
@@ -34,8 +36,12 @@ update :: proc() {
 		if tile.wall {
 			tile_color = rl.Color{0, 0, 0, 255}
 		}
+		if i == target_tile {
+			tile_color = rl.Color{255, 0, 0, 255}
+		}
 		rl.DrawRectangle(pos_x, pos_y, tile_size, tile_size, tile_color)
 		rl.DrawRectangleLines(pos_x, pos_y, tile_size, tile_size, rl.Color{0, 0, 0, 255})
+		i += 1
 	}
 	dummy_player_draw(player)
 	rl.EndDrawing()
