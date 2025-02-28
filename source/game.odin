@@ -36,19 +36,20 @@ update :: proc() {
 	target_tile := ff_grid_world_pos_to_index(grid, int(player.position.x), int(player.position.y))
 	distances,calc_ok := ff_pathfinder_calculate(grid, grid.tiles[target_tile])
 	flows := ff_pathfinder_cost_field_to_flow_field(grid, distances, target_tile)
-	
-	for enemy in enemies {
-		if (!enemy_is_close_enough(enemy, player)) {
-			enemy_pos_index := ff_grid_world_pos_to_index(grid, int(enemy.position.x), int(enemy.position.y))
 
-			if (enemy_pos_index < 0 || enemy_pos_index >= len(flows)) {
-				log.error("Enemy out of bounds")
-				continue
+	if(calc_ok) {
+		for enemy in enemies {
+			if (!enemy_is_close_enough(enemy, player)) {
+				enemy_pos_index := ff_grid_world_pos_to_index(grid, int(enemy.position.x), int(enemy.position.y))
+				
+				if (enemy_pos_index < 0 || enemy_pos_index >= len(flows)) {
+					log.error("Enemy out of bounds")
+					continue
+				}
+				dummy_enemy_move_towards_direction(enemy, flows[ff_grid_world_pos_to_index(grid, int(enemy.position.x), int(enemy.position.y))], dt)
 			}
-			dummy_enemy_move_towards_direction(enemy, flows[ff_grid_world_pos_to_index(grid, int(enemy.position.x), int(enemy.position.y))], dt)
-			continue
+			dummy_enemy_separate(enemy, enemies[:], dt)
 		}
-		dummy_enemy_separate(enemy, enemies[:], dt)
 	}
 
 	rl.BeginDrawing()
@@ -79,6 +80,9 @@ shutdown :: proc() {
 	rl.CloseWindow()
 	ff_grid_free(grid)
 	dummy_player_free(player)
+	for enemy in enemies {
+		dummy_enemy_free(enemy)
+	}
 }
 
 should_run :: proc() -> bool {
