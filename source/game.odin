@@ -14,6 +14,7 @@ init :: proc() {
 	rl.SetConfigFlags({.WINDOW_RESIZABLE, .VSYNC_HINT})
 	rl.InitWindow(1280, 720, "Odin + Raylib on the web")
 	grid = ff_grid_make()
+	ff_grid_add_vertical_wall(grid, 10, 0, 10)
 	player = dummy_player_make()
 }
 

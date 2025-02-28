@@ -43,7 +43,7 @@ ff_visualizer_draw_flow :: proc (grid : ^FFGrid,target_index : int, directions :
 		pos_x := i32(tile.x * grid.tile_size)
 		pos_y := i32(tile.y * grid.tile_size)
 		tile_size := i32(grid.tile_size)
-		tile_color := rl.Color{255, 255, 255, 255}
+		tile_color := rl.LIGHTGRAY
 		if tile.type == TileType.Wall {
 			tile_color = rl.Color{0, 0, 0, 255}
 		}
@@ -69,26 +69,32 @@ ff_visualizer_draw_flow :: proc (grid : ^FFGrid,target_index : int, directions :
 				switch dir {
 				case DIR_LEFT:
 					// fmt.println("DIR_LEFT")
-					v1 = [2]i32{pos_x, pos_y+14}
-					v2 = [2]i32{pos_x+16, pos_y+2}
+					v2 = [2]i32{pos_x, pos_y+14}
+					v1 = [2]i32{pos_x+16, pos_y+2}
 					v3 = [2]i32{pos_x+16, pos_y+30}
 				case DIR_RIGTH:
 					// fmt.println("DIR_RIGTH")
-					v1 = [2]i32{pos_x+30, pos_y+16}
-					v2 = [2]i32{pos_x+16, pos_y+2}
-					v3 = [2]i32{pos_x+16, pos_y+30}
+					v3 = [2]i32{pos_x+30, pos_y+16}
+					v1 = [2]i32{pos_x+16, pos_y+2}
+					v2 = [2]i32{pos_x+16, pos_y+30}
 				case DIR_UP:
 					// fmt.println("DIR_UP")
-					v1 = [2]i32{pos_x+16, pos_y+2}
-					v2 = [2]i32{pos_x+2, pos_y+16}
-					v3 = [2]i32{pos_x+30, pos_y+16}
+					v2 = [2]i32{pos_x+16, pos_y+2}
+					v3 = [2]i32{pos_x+2, pos_y+16}
+					v1 = [2]i32{pos_x+30, pos_y+16}
 				case DIR_DOWN:
 					// fmt.println("DIR_DOWN")
-					v1 = [2]i32{pos_x+16, pos_y+30}
-					v2 = [2]i32{pos_x+2, pos_y+16}
+					v2 = [2]i32{pos_x+16, pos_y+30}
+					v1 = [2]i32{pos_x+2, pos_y+16}
 					v3 = [2]i32{pos_x+30, pos_y+16}
 				}
 				rl.DrawTriangleLines(
+					rl.Vector2{f32(v1[0]), f32(v1[1])},
+					rl.Vector2{f32(v2[0]), f32(v2[1])},
+					rl.Vector2{f32(v3[0]), f32(v3[1])},
+					rl.Color{0, 0, 255, 255}
+				)
+				rl.DrawTriangle(
 					rl.Vector2{f32(v1[0]), f32(v1[1])},
 					rl.Vector2{f32(v2[0]), f32(v2[1])},
 					rl.Vector2{f32(v3[0]), f32(v3[1])},

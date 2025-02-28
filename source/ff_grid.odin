@@ -30,9 +30,9 @@ ff_grid_make :: proc () -> ^FFGrid {
         }
     }
 
-    for i in 0..<GRID_WIDTH * 4{
-        result.tiles[i].type = TileType.Wall
-    }
+    // for i in 0..<GRID_WIDTH * 4{
+    //     result.tiles[i].type = TileType.Wall
+    // }
     return result;
 }
 
@@ -78,4 +78,13 @@ ff_grid_get_neighbours :: proc(grid : ^FFGrid, tile : FFTile) -> [4]^FFTile {
         result[3] = right
     }
     return result
+}
+
+ff_grid_add_vertical_wall :: proc(grid : ^FFGrid, x, y, height : int) {
+    for i in 0..<height {
+        tile := ff_grid_pos_to_tile(grid, x, y + i)
+        if tile != nil {
+            tile.type = TileType.Wall
+        }
+    }
 }
