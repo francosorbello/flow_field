@@ -1,4 +1,4 @@
-package game
+package flow_field
 
 TileType :: enum {
     Walkable,

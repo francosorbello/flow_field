@@ -1,4 +1,4 @@
-package game
+package flow_field
 
 GRID_WIDTH : int : 40 // size based on window
 GRID_HEIGHT : int : 22 // size based on window
@@ -30,9 +30,6 @@ ff_grid_make :: proc () -> ^FFGrid {
         }
     }
 
-    // for i in 0..<GRID_WIDTH * 4{
-    //     result.tiles[i].type = TileType.Wall
-    // }
     return result;
 }
 

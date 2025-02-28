@@ -4,11 +4,12 @@ import rl "vendor:raylib"
 import "core:log"
 import "core:fmt"
 import "core:c"
+import ff "flow_field"
 
 ENEMY_COUNT : int : 2
 
 run: bool
-grid : ^FFGrid
+grid : ^ff.FFGrid
 player : ^DummyPlayer
 
 enemies : [ENEMY_COUNT]^DummyEnemy
@@ -17,8 +18,8 @@ init :: proc() {
 	run = true
 	rl.SetConfigFlags({.WINDOW_RESIZABLE, .VSYNC_HINT})
 	rl.InitWindow(1280, 720, "Odin + Raylib on the web")
-	grid = ff_grid_make()
-	ff_grid_add_vertical_wall(grid, 10, 0, 10)
+	grid = ff.ff_grid_make()
+	ff.ff_grid_add_vertical_wall(grid, 10, 0, 10)
 	player = dummy_player_make()
 	
 	for i in 0..<len(enemies) {
@@ -33,20 +34,20 @@ update :: proc() {
 	dummy_player_update(player, dt)
 
 	tiles := grid.tiles
-	target_tile := ff_grid_world_pos_to_index(grid, int(player.position.x), int(player.position.y))
-	distances,calc_ok := ff_pathfinder_calculate(grid, grid.tiles[target_tile])
-	flows := ff_pathfinder_cost_field_to_flow_field(grid, distances, target_tile)
+	target_tile := ff.ff_grid_world_pos_to_index(grid, int(player.position.x), int(player.position.y))
+	distances,calc_ok := ff.ff_pathfinder_calculate(grid, grid.tiles[target_tile])
+	flows := ff.ff_pathfinder_cost_field_to_flow_field(grid, distances, target_tile)
 
 	if(calc_ok) {
 		for enemy in enemies {
 			if (!enemy_is_close_enough(enemy, player)) {
-				enemy_pos_index := ff_grid_world_pos_to_index(grid, int(enemy.position.x), int(enemy.position.y))
+				enemy_pos_index := ff.ff_grid_world_pos_to_index(grid, int(enemy.position.x), int(enemy.position.y))
 				
 				if (enemy_pos_index < 0 || enemy_pos_index >= len(flows)) {
 					log.error("Enemy out of bounds")
 					continue
 				}
-				dummy_enemy_move_towards_direction(enemy, flows[ff_grid_world_pos_to_index(grid, int(enemy.position.x), int(enemy.position.y))], dt)
+				dummy_enemy_move_towards_direction(enemy, flows[ff.ff_grid_world_pos_to_index(grid, int(enemy.position.x), int(enemy.position.y))], dt)
 			}
 			dummy_enemy_separate(enemy, enemies[:], dt)
 		}
@@ -56,7 +57,7 @@ update :: proc() {
 	rl.ClearBackground({0, 120, 153, 255})
 	
 	// ff_visualizer_draw_cost(grid, target_tile, distances, calc_ok)
-	ff_visualizer_draw_flow(grid, target_tile, flows[:], calc_ok)
+	ff.ff_visualizer_draw_flow(grid, target_tile, flows[:], calc_ok)
 
 	dummy_player_draw(player)
 	for enemy in enemies {
@@ -78,7 +79,7 @@ parent_window_size_changed :: proc(w, h: int) {
 
 shutdown :: proc() {
 	rl.CloseWindow()
-	ff_grid_free(grid)
+	ff.ff_grid_free(grid)
 	dummy_player_free(player)
 	for enemy in enemies {
 		dummy_enemy_free(enemy)

@@ -1,4 +1,4 @@
-package game
+package flow_field
 
 import "core:fmt"
 import rl "vendor:raylib"
