@@ -51,3 +51,14 @@ ff_grid_pos_to_index :: proc(grid : ^FFGrid, x, y : int) -> int {
 ff_grid_world_pos_to_index :: proc(grid : ^FFGrid, x, y : int) -> int {
     return int(y / grid.tile_size) * grid.width + int(x / grid.tile_size)
 }
+
+ff_grid_get_neighbours :: proc(grid : ^FFGrid, tile : FFTile) -> [4]^FFTile {
+    result := [4]^FFTile{}
+    x := tile.x
+    y := tile.y
+    result[0] = ff_grid_pos_to_tile(grid, x, y - 1)
+    result[1] = ff_grid_pos_to_tile(grid, x, y + 1)
+    result[2] = ff_grid_pos_to_tile(grid, x - 1, y)
+    result[3] = ff_grid_pos_to_tile(grid, x + 1, y)
+    return result
+}
