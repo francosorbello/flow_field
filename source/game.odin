@@ -5,11 +5,13 @@ import "core:log"
 import "core:fmt"
 import "core:c"
 
+ENEMY_COUNT : int : 2
+
 run: bool
 grid : ^FFGrid
 player : ^DummyPlayer
 
-enemies : [10]^DummyEnemy
+enemies : [ENEMY_COUNT]^DummyEnemy
 
 init :: proc() {
 	run = true
@@ -36,7 +38,16 @@ update :: proc() {
 	flows := ff_pathfinder_cost_field_to_flow_field(grid, distances, target_tile)
 	
 	for enemy in enemies {
-		dummy_enemy_move_towards_direction(enemy, flows[ff_grid_world_pos_to_index(grid, int(enemy.position.x), int(enemy.position.y))], dt)
+		if (!enemy_is_close_enough(enemy, player)) {
+			enemy_pos_index := ff_grid_world_pos_to_index(grid, int(enemy.position.x), int(enemy.position.y))
+
+			if (enemy_pos_index < 0 || enemy_pos_index >= len(flows)) {
+				log.error("Enemy out of bounds")
+				continue
+			}
+			dummy_enemy_move_towards_direction(enemy, flows[ff_grid_world_pos_to_index(grid, int(enemy.position.x), int(enemy.position.y))], dt)
+			continue
+		}
 		dummy_enemy_separate(enemy, enemies[:], dt)
 	}
 
@@ -48,8 +59,10 @@ update :: proc() {
 
 	dummy_player_draw(player)
 	for enemy in enemies {
-		dummy_enemy_draw(enemy)
+		dummy_enemy_draw(enemy, enemies[:], true)
 	}
+
+
 	
 	rl.EndDrawing()
 	// Anything allocated using temp allocator is invalid after this.
