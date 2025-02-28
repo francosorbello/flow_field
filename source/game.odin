@@ -2,7 +2,6 @@ package game
 
 import rl "vendor:raylib"
 import "core:log"
-import "core:fmt"
 import "core:c"
 import ff "flow_field"
 
@@ -33,7 +32,6 @@ update :: proc() {
 	dt := rl.GetFrameTime()
 	dummy_player_update(player, dt)
 
-	tiles := grid.tiles
 	target_tile := ff.ff_grid_world_pos_to_index(grid, int(player.position.x), int(player.position.y))
 	distances,calc_ok := ff.ff_pathfinder_calculate(grid, grid.tiles[target_tile])
 	flows := ff.ff_pathfinder_cost_field_to_flow_field(grid, distances, target_tile)

@@ -30,7 +30,7 @@ ff_grid_make :: proc () -> ^FFGrid {
         }
     }
 
-    return result;
+    return result
 }
 
 ff_grid_free :: proc (grid : ^FFGrid) {

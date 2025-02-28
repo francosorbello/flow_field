@@ -92,13 +92,13 @@ ff_visualizer_draw_flow :: proc (grid : ^FFGrid,target_index : int, directions :
 					rl.Vector2{f32(v1[0]), f32(v1[1])},
 					rl.Vector2{f32(v2[0]), f32(v2[1])},
 					rl.Vector2{f32(v3[0]), f32(v3[1])},
-					rl.Color{0, 0, 255, 255}
+					rl.Color{0, 0, 255, 255},
 				)
 				rl.DrawTriangle(
 					rl.Vector2{f32(v1[0]), f32(v1[1])},
 					rl.Vector2{f32(v2[0]), f32(v2[1])},
 					rl.Vector2{f32(v3[0]), f32(v3[1])},
-					rl.Color{0, 0, 255, 255}
+					rl.Color{0, 0, 255, 255},
 				)
 			}
         }
