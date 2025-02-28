@@ -59,9 +59,23 @@ ff_grid_get_neighbours :: proc(grid : ^FFGrid, tile : FFTile) -> [4]^FFTile {
     result := [4]^FFTile{}
     x := tile.x
     y := tile.y
-    result[0] = ff_grid_pos_to_tile(grid, x, y - 1)
-    result[1] = ff_grid_pos_to_tile(grid, x, y + 1)
-    result[2] = ff_grid_pos_to_tile(grid, x - 1, y)
-    result[3] = ff_grid_pos_to_tile(grid, x + 1, y)
+
+    up := ff_grid_pos_to_tile(grid, x, y - 1)
+    down := ff_grid_pos_to_tile(grid, x, y + 1)
+    left := ff_grid_pos_to_tile(grid, x - 1, y)
+    right := ff_grid_pos_to_tile(grid, x + 1, y)
+    
+    if up != nil && up.type != TileType.Wall {
+        result[0] = up
+    }
+    if down != nil && down.type != TileType.Wall {
+        result[1] = down
+    }
+    if left != nil && left.type != TileType.Wall {
+        result[2] = left
+    }
+    if right != nil && right.type != TileType.Wall {
+        result[3] = right
+    }
     return result
 }

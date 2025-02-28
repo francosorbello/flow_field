@@ -8,6 +8,7 @@ import "core:c"
 run: bool
 grid : ^FFGrid
 player : ^DummyPlayer
+
 init :: proc() {
 	run = true
 	rl.SetConfigFlags({.WINDOW_RESIZABLE, .VSYNC_HINT})
@@ -28,7 +29,9 @@ update :: proc() {
 	tiles := grid.tiles
 	target_tile := ff_grid_world_pos_to_index(grid, int(player.position.x), int(player.position.y))
 	distances,calc_ok := ff_pathfinder_calculate(grid, grid.tiles[target_tile])
-	ff_visualizer_draw(grid, target_tile, distances, calc_ok)
+	flows := ff_pathfinder_cost_field_to_flow_field(grid, distances, target_tile)
+	// ff_visualizer_draw_cost(grid, target_tile, distances, calc_ok)
+	ff_visualizer_draw_flow(grid, target_tile, flows[:], calc_ok)
 
 	dummy_player_draw(player)
 	rl.EndDrawing()
