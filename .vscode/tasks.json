@@ -1,0 +1,13 @@
+{
+	"version": "2.0.0",
+	"command": "",
+	"args": [],
+	"tasks": [
+		{
+			"label": "Build",
+			"type": "shell",
+			"command": "odin build source/main_desktop -out:build/desktop/game_desktop.exe -debug",
+			"group": "build"
+		},
+	]
+}

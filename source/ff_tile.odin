@@ -1,9 +1,14 @@
 package game
 
+TileType :: enum {
+    Walkable,
+    Expensive,
+    Wall,
+}
+
 FFTile :: struct {
     x : int,
     y : int,
-    visited : bool,
-    wall : bool,
+    type : TileType,
 }
 

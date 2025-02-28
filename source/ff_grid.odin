@@ -26,8 +26,7 @@ ff_grid_make :: proc () -> ^FFGrid {
         result.tiles[i] = FFTile{
             x = i % GRID_WIDTH,
             y = i / GRID_WIDTH,
-            visited = false,
-            wall = false,
+            type = TileType.Walkable,
         }
     }
     return result;

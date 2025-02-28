@@ -28,13 +28,14 @@ update :: proc() {
 	tiles := grid.tiles
 	target_tile := ff_grid_world_pos_to_index(grid, int(player.position.x), int(player.position.y))
 	distances := ff_pathfinder_calculate(grid, grid.tiles[target_tile])
+
 	i := 0
 	for tile in tiles {
 		pos_x := i32(tile.x * grid.tile_size)
 		pos_y := i32(tile.y * grid.tile_size)
 		tile_size := i32(grid.tile_size)
 		tile_color := rl.Color{255, 255, 255, 255}
-		if tile.wall {
+		if tile.type == TileType.Wall {
 			tile_color = rl.Color{0, 0, 0, 255}
 		}
 		if i == target_tile {
