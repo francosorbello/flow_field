@@ -9,6 +9,8 @@ run: bool
 grid : ^FFGrid
 player : ^DummyPlayer
 
+enemies : [10]^DummyEnemy
+
 init :: proc() {
 	run = true
 	rl.SetConfigFlags({.WINDOW_RESIZABLE, .VSYNC_HINT})
@@ -16,6 +18,10 @@ init :: proc() {
 	grid = ff_grid_make()
 	ff_grid_add_vertical_wall(grid, 10, 0, 10)
 	player = dummy_player_make()
+	
+	for i in 0..<len(enemies) {
+		enemies[i] = dummy_enemy_make()
+	}
 }
 
 update :: proc() {
@@ -23,18 +29,28 @@ update :: proc() {
 	// Update player
 	dt := rl.GetFrameTime()
 	dummy_player_update(player, dt)
-	
-	rl.BeginDrawing()
-	rl.ClearBackground({0, 120, 153, 255})
-	
+
 	tiles := grid.tiles
 	target_tile := ff_grid_world_pos_to_index(grid, int(player.position.x), int(player.position.y))
 	distances,calc_ok := ff_pathfinder_calculate(grid, grid.tiles[target_tile])
 	flows := ff_pathfinder_cost_field_to_flow_field(grid, distances, target_tile)
+	
+	for enemy in enemies {
+		dummy_enemy_move_towards_direction(enemy, flows[ff_grid_world_pos_to_index(grid, int(enemy.position.x), int(enemy.position.y))], dt)
+		dummy_enemy_separate(enemy, enemies[:], dt)
+	}
+
+	rl.BeginDrawing()
+	rl.ClearBackground({0, 120, 153, 255})
+	
 	// ff_visualizer_draw_cost(grid, target_tile, distances, calc_ok)
 	ff_visualizer_draw_flow(grid, target_tile, flows[:], calc_ok)
 
 	dummy_player_draw(player)
+	for enemy in enemies {
+		dummy_enemy_draw(enemy)
+	}
+	
 	rl.EndDrawing()
 	// Anything allocated using temp allocator is invalid after this.
 	free_all(context.temp_allocator)
