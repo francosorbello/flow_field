@@ -1,9 +1,13 @@
 package game
 import  "core:fmt"
 
-ff_pathfinder_calculate :: proc (grid : ^FFGrid, start : FFTile) -> map[FFTile]int {
+ff_pathfinder_calculate :: proc (grid : ^FFGrid, start : FFTile) -> (map[FFTile]int,bool) #optional_ok {
     frontier : Queue
     distance : map[FFTile]int
+
+    if start.type == TileType.Wall {
+        return nil,false
+    }
 
     append(&frontier, start)
     distance[start] = 0
@@ -11,7 +15,7 @@ ff_pathfinder_calculate :: proc (grid : ^FFGrid, start : FFTile) -> map[FFTile]i
         current := queue_dequeue(&frontier)
         neighbours := ff_grid_get_neighbours(grid, current)
         for next in neighbours {
-            if (next == nil) {
+            if (next == nil || next.type == TileType.Wall) {
                 continue
             }
             if next^ not_in distance {
@@ -20,5 +24,5 @@ ff_pathfinder_calculate :: proc (grid : ^FFGrid, start : FFTile) -> map[FFTile]i
             }
         }
     }
-    return distance
+    return distance,true
 }

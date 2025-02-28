@@ -29,6 +29,10 @@ ff_grid_make :: proc () -> ^FFGrid {
             type = TileType.Walkable,
         }
     }
+
+    for i in 0..<GRID_WIDTH * 4{
+        result.tiles[i].type = TileType.Wall
+    }
     return result;
 }
 
