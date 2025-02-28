@@ -1,11 +1,9 @@
 package game
 
 import rl "vendor:raylib"
-import  "core:fmt"
-import "core:math"
 import "core:encoding/uuid"
 import "core:crypto"
-
+import "core:math"
 
 ENEMY_SPEED : f32 : 100
 SPACE_BETWEEN_OTHERS : f32 : 20

@@ -1,5 +1,4 @@
 package flow_field
-import  "core:fmt"
 import rl "vendor:raylib"
 
 MAX_COST : int : 255
