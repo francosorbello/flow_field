@@ -1,4 +1,10 @@
+# Flow Field Pathfinding
+
+https://github.com/user-attachments/assets/c90e24ec-0439-43cf-bc74-9eec2c5659fc
+
+
 # Odin + Raylib on the web
+
 ![image](https://github.com/user-attachments/assets/a104c6f4-8789-415d-a9af-c8ff2e9458ec)
 
 Make games using Odin + Raylib that works in browser and on desktop.
